@@ -3,56 +3,78 @@
 import { useState } from "react";
 import LeaderboardTabs from "./LeaderboardTabs";
 import LeaderboardColumn from "./LeaderboardColumn";
+import LeaderboardItem from "./LeaderboardItem";
 
-type Tab = "learner" | "educators" | "institutions";
+type Row = { name: string; note: string };
+type Columns = { k12: Row[]; college: Row[]; general: Row[] };
 
-const DATA: Record<
-  Tab,
-  {
-    k12: { name: string; subtitle?: string }[];
-    college: { name: string; subtitle?: string }[];
-    general: { name: string; subtitle?: string }[];
-  }
-> = {
+const DATA: Record<"learner" | "educators" | "institutions", Columns> = {
   learner: {
-    k12: [{ name: "Name" }, { name: "Name" }, { name: "Name" }],
-    college: [{ name: "Name" }, { name: "Name" }, { name: "Name" }],
-    general: [{ name: "Name" }, { name: "Name" }, { name: "Name" }, { name: "Name" }],
+    k12: [
+      { name: "Name", note: "The Most Impressive" },
+      { name: "Name", note: "The Most Impressive" },
+      { name: "Name", note: "The Most Impressive" },
+    ],
+    college: [
+      { name: "Name", note: "The Most Impressive" },
+      { name: "Name", note: "The Most Impressive" },
+      { name: "Name", note: "The Most Impressive" },
+    ],
+    general: [
+      { name: "Name", note: "The Most Impressive" },
+      { name: "Name", note: "The Most Impressive" },
+      { name: "Name", note: "The Most Impressive" },
+    ],
   },
   educators: {
-    k12: [{ name: "Name" }, { name: "Name" }],
-    college: [{ name: "Name" }, { name: "Name" }, { name: "Name" }],
-    general: [{ name: "Name" }],
+    k12: [{ name: "Name", note: "Top Mentor" }, { name: "Name", note: "Top Mentor" }, { name: "Name", note: "Top Mentor" }],
+    college: [{ name: "Name", note: "Top Mentor" }, { name: "Name", note: "Top Mentor" }, { name: "Name", note: "Top Mentor" }],
+    general: [{ name: "Name", note: "Top Mentor" }, { name: "Name", note: "Top Mentor" }, { name: "Name", note: "Top Mentor" }],
   },
   institutions: {
-    k12: [{ name: "Name" }],
-    college: [{ name: "Name" }, { name: "Name" }],
-    general: [{ name: "Name" }, { name: "Name" }],
+    k12: [{ name: "School A", note: "Outstanding" }, { name: "School B", note: "Outstanding" }, { name: "School C", note: "Outstanding" }],
+    college: [{ name: "Campus A", note: "Outstanding" }, { name: "Campus B", note: "Outstanding" }, { name: "Campus C", note: "Outstanding" }],
+    general: [{ name: "Org A", note: "Outstanding" }, { name: "Org B", note: "Outstanding" }, { name: "Org C", note: "Outstanding" }],
   },
 };
 
 export default function SectionSix() {
-  const [tab, setTab] = useState<Tab>("learner");
-  const d = DATA[tab];
+  const [tab, setTab] = useState<"learner" | "educators" | "institutions">(
+    "learner",
+  );
+  const { k12, college, general } = DATA[tab];
 
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-16">
-      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl">
-        {/* gradient bg seperti desain */}
-        <div className="absolute inset-0 bg-gradient-to-b from-neutral-200 to-neutral-900 dark:from-neutral-800 dark:to-neutral-900" />
-        <div className="relative z-10 p-6 sm:p-10">
-          <h2 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">
+    <section className="px-4 sm:px-6 lg:px-8 py-14">
+      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-secondary text-secondary-foreground p-6 sm:p-10">
+        {/* dekorasi radial */}
+        <div className="pointer-events-none absolute inset-0 opacity-20 [background:radial-gradient(520px_circle_at_10%_0%,#ffffff22,transparent_45%),radial-gradient(520px_circle_at_90%_0%,#ffffff22,transparent_45%)]" />
+
+        <div className="relative z-10">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
             Leaderboard
           </h2>
 
-          <div className="mt-4">
-            <LeaderboardTabs value={tab} onChange={setTab} />
-          </div>
+          <LeaderboardTabs value={tab} onChange={setTab} />
 
-          <div className="mt-6 grid gap-5 lg:gap-6 grid-cols-1 md:grid-cols-3">
-            <LeaderboardColumn title="K12" items={d.k12} />
-            <LeaderboardColumn title="College" items={d.college} />
-            <LeaderboardColumn title="General" items={d.general} />
+          <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <LeaderboardColumn title="K12">
+              {k12.map((r, i) => (
+                <LeaderboardItem key={i} name={r.name} note={r.note} />
+              ))}
+            </LeaderboardColumn>
+
+            <LeaderboardColumn title="College">
+              {college.map((r, i) => (
+                <LeaderboardItem key={i} name={r.name} note={r.note} />
+              ))}
+            </LeaderboardColumn>
+
+            <LeaderboardColumn title="General">
+              {general.map((r, i) => (
+                <LeaderboardItem key={i} name={r.name} note={r.note} />
+              ))}
+            </LeaderboardColumn>
           </div>
         </div>
       </div>

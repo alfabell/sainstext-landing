@@ -1,29 +1,31 @@
 import { ReactNode } from "react";
 
-type Props = {
-  name: string;
-  subtitle?: string;
-  avatar?: ReactNode; // optional custom avatar
-};
-
 export default function LeaderboardItem({
   name,
-  subtitle = "The Most Impressive",
+  note,
   avatar,
-}: Props) {
+}: {
+  name: string;
+  note: string;
+  avatar?: ReactNode;
+}) {
   return (
-    <div className="flex items-center gap-3">
-      <div className="h-10 w-10 rounded-md bg-neutral-200 dark:bg-neutral-800 grid place-items-center overflow-hidden">
-        {avatar ?? <span className="text-sm">👤</span>}
+    <li className="flex items-start gap-3">
+      <div className="grid place-content-center h-10 w-10 shrink-0 rounded-lg bg-violet-600/15 text-violet-400 ring-1 ring-violet-500/20">
+        {avatar ?? <UserIcon />}
       </div>
-      <div className="leading-tight">
-        <div className="font-semibold text-sm text-neutral-900 dark:text-white">
-          {name}
-        </div>
-        <div className="text-xs text-neutral-600 dark:text-neutral-300">
-          {subtitle}
-        </div>
+      <div className="min-w-0">
+        <p className="font-semibold leading-5">{name}</p>
+        <p className="text-sm text-neutral-400">{note}</p>
       </div>
-    </div>
+    </li>
+  );
+}
+
+function UserIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden>
+      <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z" />
+    </svg>
   );
 }

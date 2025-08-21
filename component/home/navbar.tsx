@@ -1,117 +1,260 @@
 "use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
+type NavItem = {
+  label: string;
+  href?: string;
+  children?: { label: string; href: string }[];
+};
+
+const NAV: NavItem[] = [
+  { label: "About us", href: "/about" },
+  { label: "Subjects", href: "/subjects" },
+  {
+    label: "What We Do",
+    href: "/what-we-do",
+    children: [
+      { label: "Team", href: "/what-we-do/team" },
+      { label: "Research", href: "/what-we-do/research" },
+      { label: "K12 Books & Resources", href: "/what-we-do/k12" },
+      { label: "College Books Resources", href: "/what-we-do/college" },
+      { label: "General", href: "/what-we-do/general" },
+      { label: "Modules", href: "/what-we-do/modules" },
+      { label: "Institutional Partnerships", href: "/what-we-do/institutional-partnerships" },
+      { label: "Technology Partnerships", href: "/what-we-do/technology-partnerships" },
+    ],
+  },
+  {
+    label: "Users",
+    href: "/users",
+    children: [
+      { label: "Learner", href: "/users/learner" },
+      { label: "Educators", href: "/users/educators" },
+      { label: "Institutions", href: "/users/institutions" },
+    ],
+  },
+  { label: "Donate", href: "/donate" },
+];
+
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
+  const [openMobile, setOpenMobile] = useState(false);
+  const [openKeys, setOpenKeys] = useState<Record<string, boolean>>({});
+  const pathname = usePathname();
+
+  const toggleSection = (key: string) =>
+    setOpenKeys((s) => ({ ...s, [key]: !s[key] }));
+
   return (
-    <header className="w-full border-b border-black/5 dark:border-white/10 bg-white/60 dark:bg-neutral-900/60 backdrop-blur supports-[backdrop-filter]:bg-white/50 sticky top-0 z-50">
-      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="h-7 w-7 rounded-lg bg-black dark:bg-white" />
-          <Link
-            href="/"
-            className="font-semibold tracking-tight text-neutral-900 dark:text-white"
-          >
-            Sainstext
+    <header className="sticky top-0 z-50 bg-secondary text-secondary-foreground border-b border-white/10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <nav className="flex items-center justify-between gap-4">
+          {/* brand */}
+          <Link href="/" className="inline-flex items-center gap-2 font-semibold h-14">
+            <span className="inline-block h-6 w-6 rounded bg-primary" />
+            <span className="hidden sm:inline">Sainstext</span>
           </Link>
-        </div>
-        <ul className="hidden md:flex items-center gap-6 text-sm text-neutral-600 dark:text-neutral-300">
-          <li>
-            <Link
-              className="hover:text-neutral-900 dark:hover:text-white"
-              href="#"
-            >
-              About us
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="hover:text-neutral-900 dark:hover:text-white"
-              href="#"
-            >
-              Subject
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="hover:text-neutral-900 dark:hover:text-white"
-              href="#"
-            >
-              What We Do
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="hover:text-neutral-900 dark:hover:text-white"
-              href="#"
-            >
-              User
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="hover:text-neutral-900 dark:hover:text-white"
-              href="#"
-            >
-              Donate
-            </Link>
-          </li>
-        </ul>
-        <div className="hidden md:flex items-center gap-3">
-          <Link
-            href="#"
-            className="px-3 h-9 inline-flex items-center rounded-xl border border-neutral-300/70 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-sm"
-          >
-            Login
-          </Link>
-          <Link
-            href="#"
-            className="px-3 h-9 inline-flex items-center rounded-xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 hover:opacity-90 text-sm font-medium"
-          >
-            Sign up free
-          </Link>
-        </div>
-        <button
-          onClick={() => setOpen((v) => !v)}
-          className="md:hidden p-2 rounded-lg border border-neutral-300 dark:border-neutral-700"
-          aria-label="Toggle menu"
-        >
-          <div className="i-[=] h-4 w-4" />
-        </button>
-      </nav>
-      {open && (
-        <div className="md:hidden border-t border-black/5 dark:border-white/10">
-          <ul className="px-4 py-3 space-y-2 text-sm">
-            {["Join us", "Katalog", "What We Do", "News", "Donate"].map(
-              (item) => (
-                <li key={item}>
-                  <Link
-                    href="#"
-                    className="block rounded-lg px-3 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+
+          {/* desktop menu */}
+          <ul className="hidden md:flex items-stretch gap-1">
+            {NAV.map((item) =>
+              item.children ? (
+                <li key={item.label} className="relative group">
+                  <button
+                    className={[
+                      "relative h-14 px-3 text-sm transition inline-flex items-center gap-1",
+                      pathname?.startsWith(item.href ?? "")
+                        ? "text-white"
+                        : "text-white/80 hover:text-white",
+                      "after:absolute after:inset-x-2 after:-bottom-px after:h-0.5 after:rounded-full after:bg-primary after:transition-transform after:origin-center",
+                      pathname?.startsWith(item.href ?? "")
+                        ? "after:scale-x-100"
+                        : "after:scale-x-0 group-hover:after:scale-x-100",
+                    ].join(" ")}
                   >
-                    {item}
+                    {item.label}
+                    <ChevronDown className="transition-transform group-hover:rotate-180" />
+                  </button>
+
+                  {/* dropdown */}
+                  <div className="absolute left-0 top-full mt-1 min-w-[240px] rounded-xl border border-white/10 bg-secondary shadow-lg ring-1 ring-black/5 opacity-0 translate-y-1 pointer-events-none transition group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
+                    <ul className="py-2">
+                      {item.children.map((c) => (
+                        <li key={c.href}>
+                          <Link
+                            href={c.href}
+                            className={[
+                              "block px-3 py-2 text-sm rounded-md",
+                              pathname?.startsWith(c.href)
+                                ? "bg-white/15 text-white"
+                                : "text-white/80 hover:text-white hover:bg-white/10",
+                            ].join(" ")}
+                          >
+                            {c.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </li>
+              ) : (
+                <li key={item.label}>
+                  <Link
+                    href={item.href ?? "#"}
+                    className={[
+                      "relative inline-flex h-14 items-center px-3 text-sm transition",
+                      pathname === item.href ? "text-white" : "text-white/80 hover:text-white",
+                      "after:absolute after:inset-x-2 after:-bottom-px after:h-0.5 after:rounded-full after:bg-primary after:transition-transform after:origin-center",
+                      pathname === item.href ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100",
+                    ].join(" ")}
+                  >
+                    {item.label}
                   </Link>
                 </li>
               )
             )}
-            <div className="flex gap-2 px-3 pt-2">
+          </ul>
+
+          {/* desktop actions */}
+          <div className="hidden md:flex items-center gap-2">
+            <Link
+              href="#"
+              className="rounded-md px-3 py-1.5 text-sm border border-white/15 bg-white/10 hover:bg-white/20 transition"
+            >
+              Login
+            </Link>
+            <Link
+              href="#"
+              className="rounded-md px-3.5 py-1.5 text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 border border-white/10 transition"
+            >
+              Sign-up Now →
+            </Link>
+          </div>
+
+          {/* mobile toggle */}
+          <button
+            onClick={() => setOpenMobile((v) => !v)}
+            className="md:hidden rounded p-2 hover:bg-white/10"
+            aria-label="Toggle menu"
+            aria-expanded={openMobile}
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" strokeWidth="2">
+              <path d="M3 6h18M3 12h18M3 18h18" />
+            </svg>
+          </button>
+        </nav>
+
+        {/* mobile menu */}
+        {openMobile && (
+          <div className="md:hidden pb-4">
+            <ul className="space-y-1 text-sm">
+              {NAV.map((item) =>
+                item.children ? (
+                  <li key={item.label} className="rounded-md">
+                    <button
+                      onClick={() =>
+                        setOpenKeys((s) => ({ ...s, [item.label]: !s[item.label] }))
+                      }
+                      className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left hover:bg-white/10"
+                    >
+                      <span
+                        className={
+                          pathname?.startsWith(item.href ?? "")
+                            ? "text-white"
+                            : "text-white/80"
+                        }
+                      >
+                        {item.label}
+                      </span>
+                      <ChevronDown
+                        className={[
+                          "transition-transform",
+                          openKeys[item.label] ? "rotate-180" : "",
+                        ].join(" ")}
+                      />
+                    </button>
+
+                    <div
+                      className={[
+                        "grid overflow-hidden transition-[grid-template-rows] duration-200",
+                        openKeys[item.label] ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+                      ].join(" ")}
+                    >
+                      <div className="min-h-0">
+                        <ul className="px-1 pb-2 space-y-1">
+                          {item.children.map((c) => (
+                            <li key={c.href}>
+                              <Link
+                                href={c.href}
+                                onClick={() => setOpenMobile(false)}
+                                className={
+                                  pathname?.startsWith(c.href)
+                                    ? "block rounded px-3 py-2 bg-white/15 text-white"
+                                    : "block rounded px-3 py-2 text-white/80 hover:text-white hover:bg-white/10"
+                                }
+                              >
+                                {c.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+                ) : (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href ?? "#"}
+                      onClick={() => setOpenMobile(false)}
+                      className={
+                        pathname === item.href
+                          ? "block rounded px-3 py-2 bg-white/15 text-white"
+                          : "block rounded px-3 py-2 text-white/80 hover:text-white hover:bg-white/10"
+                      }
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                )
+              )}
+            </ul>
+
+            <div className="mt-3 flex gap-2">
               <Link
                 href="#"
-                className="flex-1 px-3 h-9 inline-flex items-center justify-center rounded-xl border border-neutral-300/70 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-sm"
+                className="flex-1 text-center rounded-md px-3 py-2 text-sm border border-white/15 bg-white/10 hover:bg-white/20"
               >
                 Login
               </Link>
               <Link
                 href="#"
-                className="flex-1 px-3 h-9 inline-flex items-center justify-center rounded-xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 hover:opacity-90 text-sm font-medium"
+                className="flex-1 text-center rounded-md px-3 py-2 text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90"
               >
-                Sign up free
+                Sign-up Now →
               </Link>
             </div>
-          </ul>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </header>
+  );
+}
+
+function ChevronDown({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden
+    >
+      <path d="M6 9l6 6 6-6" />
+    </svg>
   );
 }

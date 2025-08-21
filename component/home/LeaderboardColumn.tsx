@@ -1,19 +1,16 @@
-import LeaderboardItem from "./LeaderboardItem";
+import { ReactNode } from "react";
 
-type Item = { name: string; subtitle?: string };
-type Props = { title: string; items: Item[] };
-
-export default function LeaderboardColumn({ title, items }: Props) {
+export default function LeaderboardColumn({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
   return (
-    <div className="rounded-xl overflow-hidden bg-white dark:bg-neutral-900 ring-1 ring-neutral-200 dark:ring-neutral-800 shadow-sm">
-      <div className="bg-neutral-900 text-white px-4 py-2 text-sm font-semibold">
-        {title}
-      </div>
-      <div className="p-4 grid gap-4">
-        {items.map((it, i) => (
-          <LeaderboardItem key={`${it.name}-${i}`} name={it.name} subtitle={it.subtitle} />
-        ))}
-      </div>
+    <div className="rounded-2xl bg-neutral-900/70 ring-1 ring-white/10 p-4 sm:p-5">
+      <div className="mb-3 text-sm font-semibold text-white/85">{title}</div>
+      <ul className="space-y-5">{children}</ul>
     </div>
   );
 }
