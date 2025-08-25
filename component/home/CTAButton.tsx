@@ -1,29 +1,34 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 
-type Variant = "primary" | "secondary";
+type Variant = "green" | "blue" | "neutral" | "dark";
 
 export default function CTAButton({
   href,
   children,
-  variant = "primary",
+  variant = "green",
+  className,
 }: {
   href: string;
   children: ReactNode;
   variant?: Variant;
+  className?: string;
 }) {
   const base =
-    "inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold shadow transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
+    "inline-flex h-11 items-center justify-center rounded-md px-5 font-semibold transition";
+  const styles = {
+  green: "bg-emerald-600 text-white border border-emerald-600 hover:bg-emerald-700",
+  blue:  "bg-blue-600 text-white border border-blue-600 hover:bg-blue-700",
+  neutral: "bg-white text-neutral-900 border border-white hover:bg-white/90",
+  dark:  "bg-black text-white border border-black hover:bg-black/90",
+} as const;
 
-  const styles: Record<Variant, string> = {
-    primary:
-      "bg-primary text-primary-foreground hover:opacity-90 focus-visible:ring-primary",
-    secondary:
-      "bg-secondary text-secondary-foreground hover:opacity-90 focus-visible:ring-secondary",
-  };
 
   return (
-    <Link href={href} className={`${base} ${styles[variant]}`}>
+    <Link
+      href={href}
+      className={[base, styles[variant], className].filter(Boolean).join(" ")}
+    >
       {children}
     </Link>
   );

@@ -46,12 +46,12 @@ export default function SectionSix() {
 
   return (
     <section className="px-4 sm:px-6 lg:px-8 py-14">
-      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-secondary text-secondary-foreground p-6 sm:p-10">
+      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-black/10 text-secondary-foreground p-6 sm:p-10">
         {/* dekorasi radial */}
         <div className="pointer-events-none absolute inset-0 opacity-20 [background:radial-gradient(520px_circle_at_10%_0%,#ffffff22,transparent_45%),radial-gradient(520px_circle_at_90%_0%,#ffffff22,transparent_45%)]" />
 
         <div className="relative z-10">
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-black">
             Leaderboard
           </h2>
 

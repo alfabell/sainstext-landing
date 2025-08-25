@@ -13,5 +13,34 @@
 }
 
 /* optional global tweaks */
-:root { color-scheme: light dark; }
-html, body { height: 100%; }
+:root {
+  color-scheme: light dark;
+}
+html,
+body {
+  height: 100%;
+}
+@keyframes shimmer-slide {
+  0% {
+    transform: translate3d(-25%, -25%, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(25%, 25%, 0) rotate(360deg);
+  }
+}
+
+@keyframes spin-around {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}
+
+.animate-shimmer-slide {
+  animation: shimmer-slide var(--speed, 3s) linear infinite;
+}
+.animate-spin-around {
+  animation: spin-around var(--speed, 3s) linear infinite;
+}

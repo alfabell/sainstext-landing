@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import ThemeToggle from "@/component/ui/theme-toggle"; // <-- import di sini
 
 type NavItem = {
   label: string;
@@ -43,9 +44,6 @@ export default function Navbar() {
   const [openMobile, setOpenMobile] = useState(false);
   const [openKeys, setOpenKeys] = useState<Record<string, boolean>>({});
   const pathname = usePathname();
-
-  const toggleSection = (key: string) =>
-    setOpenKeys((s) => ({ ...s, [key]: !s[key] }));
 
   return (
     <header className="sticky top-0 z-50 bg-secondary text-secondary-foreground border-b border-white/10">
@@ -119,6 +117,9 @@ export default function Navbar() {
 
           {/* desktop actions */}
           <div className="hidden md:flex items-center gap-2">
+            {/* Theme toggle (desktop) */}
+            <ThemeToggle className="mr-1" /> {/* <-- Theme toggle */}
+
             <Link
               href="#"
               className="rounded-md px-3 py-1.5 text-sm border border-white/15 bg-white/10 hover:bg-white/20 transition"
@@ -220,6 +221,11 @@ export default function Navbar() {
                 )
               )}
             </ul>
+
+            {/* Theme toggle (mobile) */}
+            <div className="mt-3 flex justify-end">
+              <ThemeToggle /> {/* <-- Theme toggle di mobile */}
+            </div>
 
             <div className="mt-3 flex gap-2">
               <Link

@@ -23,7 +23,7 @@ export default function LeaderboardTabs({
               "h-9 rounded-md px-3 text-sm font-medium transition border",
               active
                 ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                : "bg-white/10 text-white/85 border-white/10 hover:bg-white/15",
+                : "bg-black/30 text-white/85 border-white/10 hover:bg-white/15",
             ].join(" ")}
           >
             {t.label}
